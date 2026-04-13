@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Project10A</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center font-sans text-white">
+    <div class="glass p-12 rounded-[2rem] shadow-2xl text-center max-w-lg w-full mx-4">
+        <h1 class="text-4xl font-bold mb-6 tracking-tight">Register for Project10A</h1>
+        <p class="text-slate-300 mb-8 text-lg">Create your secure account</p>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <p class="text-red-400 mb-4"><%= error %></p>
+        <% } %>
+
+        <form action="/auth/register" method="POST" class="flex flex-col gap-4">
+            <input type="text" name="name" placeholder="Full Name" required
+                   class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-slate-400">
+            <input type="email" name="email" placeholder="Email" required
+                   class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-slate-400">
+            <input type="password" name="password" placeholder="Password" required
+                   class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-slate-400">
+
+            <p class="text-slate-300 text-sm mt-4 mb-2">Security Questions (for password recovery):</p>
+            <select name="questions"
+                    class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+                <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                <option value="What is your favorite book?">What is your favorite book?</option>
+            </select>
+            <input type="text" name="answers" placeholder="Answer to Question 1" required
+                   class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-slate-400">
+
+            <select name="questions"
+                    class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+                <option value="What city were you born in?">What city were you born in?</option>
+                <option value="What is your favorite movie?">What is your favorite movie?</option>
+                <option value="What is the name of your elementary school?">What is the name of your elementary school?</option>
+            </select>
+            <input type="text" name="answers" placeholder="Answer to Question 2" required
+                   class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-slate-400">
+
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-500 transition-all py-3 rounded-xl font-semibold shadow-lg shadow-blue-900/20 mt-4">
+                Register
+            </button>
+        </form>
+
+        <div class="mt-6 text-sm">
+            <a href="/auth/login" class="text-blue-400 hover:underline">Already have an account? Login</a>
+        </div>
+    </div>
+</body>
+</html>

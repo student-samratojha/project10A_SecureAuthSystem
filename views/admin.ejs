@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Project10A</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans text-white p-8">
+    <div class="max-w-6xl mx-auto">
+        <nav class="flex justify-between items-center mb-12 glass p-6 rounded-3xl">
+            <h1 class="text-2xl font-bold tracking-tighter text-white">Admin <span class="text-blue-500">Console</span></h1>
+            <div class="flex gap-4">
+                <a href="/" class="px-5 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm">Main Site</a>
+                <a href="/auth/logout" class="px-5 py-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all text-sm">Logout</a>
+            </div>
+        </nav>
+
+        <main class="flex flex-col gap-12">
+            
+            <!-- PENDING USERS -->
+            <section class="glass rounded-[2rem] overflow-hidden">
+                <div class="p-8 border-b border-white/5 flex justify-between items-center">
+                    <h2 class="text-xl font-semibold">Pending Approvals</h2>
+                    <span class="text-xs bg-amber-500/20 text-amber-400 px-3 py-1 rounded-full border border-amber-500/30">Count: <%= pendingUsers.length %></span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-widest border-b border-white/5">
+                                <th class="p-6">User Details</th>
+                                <th class="p-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <% pendingUsers.forEach(user => { %>
+                            <tr class="hover:bg-white/[0.02] transition-colors">
+                                <td class="p-6">
+                                    <p class="font-medium text-slate-100"><%= user.name %></p>
+                                    <p class="text-xs text-slate-400"><%= user.email %></p>
+                                </td>
+                                <td class="p-6">
+                                    <form action="/secure/verify-user" method="POST" class="inline">
+                                        <input type="hidden" name="id" value="<%= user._id %>">
+                                        <button class="text-xs bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-900/20">Verify User</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                            <% if(pendingUsers.length === 0) { %>
+                                <tr><td colspan="2" class="p-6 text-center text-slate-500 text-sm italic">No pending users found.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- VERIFIED USERS -->
+            <section class="glass rounded-[2rem] overflow-hidden">
+                <div class="p-8 border-b border-white/5 flex justify-between items-center">
+                    <h2 class="text-xl font-semibold">Verified Users</h2>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30">Active: <%= verifiedUsers.length %></span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-widest border-b border-white/5">
+                                <th class="p-6">User Details</th>
+                                <th class="p-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <% verifiedUsers.forEach(user => { %>
+                            <tr class="hover:bg-white/[0.02] transition-colors">
+                                <td class="p-6">
+                                    <p class="font-medium text-slate-100"><%= user.name %></p>
+                                    <p class="text-xs text-slate-400"><%= user.email %></p>
+                                </td>
+                                <td class="p-6">
+                                    <form action="/secure/delete-user" method="POST" class="inline">
+                                        <input type="hidden" name="id" value="<%= user._id %>">
+                                        <button class="text-xs bg-red-600/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg font-bold hover:bg-red-600/40 transition-all">Revoke & Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                            <% if(verifiedUsers.length === 0) { %>
+                                <tr><td colspan="2" class="p-6 text-center text-slate-500 text-sm italic">No verified users.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- DELETED USERS -->
+            <section class="glass rounded-[2rem] overflow-hidden border-red-500/10">
+                <div class="p-8 border-b border-white/5 flex justify-between items-center bg-red-500/5">
+                    <h2 class="text-xl font-semibold text-red-400">Archived / Deleted</h2>
+                    <span class="text-xs bg-red-500/20 text-red-400 px-3 py-1 rounded-full border border-red-500/30">Total: <%= deletedUsers.length %></span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-widest border-b border-white/5">
+                                <th class="p-6">User Details</th>
+                                <th class="p-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <% deletedUsers.forEach(user => { %>
+                            <tr class="opacity-70 hover:opacity-100 transition-opacity">
+                                <td class="p-6">
+                                    <p class="font-medium text-slate-300 line-through decoration-red-500/50"><%= user.name %></p>
+                                    <p class="text-xs text-slate-500"><%= user.email %></p>
+                                </td>
+                                <td class="p-6">
+                                    <form action="/secure/restore-user" method="POST" class="inline">
+                                        <input type="hidden" name="id" value="<%= user._id %>">
+                                        <button class="text-xs bg-white text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-slate-200 transition-all">Restore Access</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                            <% if(deletedUsers.length === 0) { %>
+                                <tr><td colspan="2" class="p-6 text-center text-slate-500 text-sm italic">Archive is empty.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- AUDIT LOGS -->
+            <section class="glass rounded-[2rem] overflow-hidden">
+                <div class="p-8 border-b border-white/5 flex justify-between items-center">
+                    <h2 class="text-xl font-semibold text-blue-400">System Audit Logs</h2>
+                    <span class="text-xs bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30">Total: <%= audits.length %> Logs</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-widest border-b border-white/5">
+                                <th class="p-6">User</th>
+                                <th class="p-6">Action</th>
+                                <th class="p-6">IP Address</th>
+                                <th class="p-6">Method & Route</th>
+                                <th class="p-6">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <% audits.forEach(log => { %>
+                            <tr class="hover:bg-white/[0.02] transition-colors text-sm">
+                                <td class="p-6">
+                                    <% if (log.user) { %>
+                                        <p class="text-slate-200"><%= log.user.name %></p>
+                                        <p class="text-[10px] text-slate-500"><%= log.user.email %></p>
+                                    <% } else { %>
+                                        <span class="text-slate-500 italic">Guest / System</span>
+                                    <% } %>
+                                </td>
+                                <td class="p-6">
+                                    <span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-xs text-slate-300"><%= log.action %></span>
+                                </td>
+                                <td class="p-6 font-mono text-xs text-slate-400"><%= log.ip %></td>
+                                <td class="p-6">
+                                    <span class="text-blue-500 font-bold"><%= log.method %></span>
+                                    <span class="text-slate-500 ml-1"><%= log.route %></span>
+                                </td>
+                                <td class="p-6 text-slate-400 text-xs">
+                                    <%= new Date(log.createdAt).toLocaleString() %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</body>
+</html>

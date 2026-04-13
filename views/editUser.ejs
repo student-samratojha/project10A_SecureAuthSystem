@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Project10A</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center font-sans text-white">
+
+<div class="glass p-10 rounded-[2rem] shadow-2xl max-w-xl w-full mx-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">Edit Your Profile</h1>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <p class="text-red-400 mb-4 text-center"><%= error %></p>
+    <% } %>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <p class="text-green-400 mb-4 text-center"><%= success %></p>
+    <% } %>
+
+    <form action="/secure/update" method="POST" class="flex flex-col gap-4">
+        <input type="text" name="name" value="<%= user.name %>" placeholder="Name" required
+            class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-400">
+
+        <input type="email" name="email" value="<%= user.email %>" placeholder="Email" required
+            class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-400">
+
+        <input type="text" name="bio" value="<%= user.bio %>" placeholder="Bio"
+            class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-400">
+
+        <input type="text" name="education" value="<%= user.education %>" placeholder="Education"
+            class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-400">
+
+        <input type="text" name="city" value="<%= user.city %>" placeholder="City"
+            class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-400">
+
+        <input type="text" name="profilePic" value="<%= user.profilePic %>" placeholder="Profile Image URL"
+            class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-400">
+
+        <button type="submit"
+            class="bg-blue-600 hover:bg-blue-500 transition-all py-3 rounded-xl font-semibold shadow-lg shadow-blue-900/20 mt-4">
+            Update Profile
+        </button>
+
+        <a href="/dashboard"
+           class="text-center bg-white/5 hover:bg-white/10 transition-all py-3 rounded-xl font-semibold border border-white/10 text-slate-300">
+            Back to Dashboard
+        </a>
+
+    </form>
+</div>
+
+</body>
+</html>

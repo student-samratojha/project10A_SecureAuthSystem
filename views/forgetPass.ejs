@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Identity - Project10A</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center font-sans text-white">
+    <div class="glass p-12 rounded-[2rem] shadow-2xl text-center max-w-lg w-full mx-4">
+        <h1 class="text-4xl font-bold mb-6 tracking-tight">Security Check</h1>
+        <p class="text-slate-300 mb-8 text-lg">Please answer your security questions to reset your password.</p>
+
+        <form action="/auth/forget-password" method="POST" class="flex flex-col gap-6 text-left">
+            <input type="hidden" name="email" value="<%= question.email %>">
+            
+            <% question.questions.forEach((q, index) => { %>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm text-blue-400 font-bold uppercase tracking-wider">Question <%= index + 1 %></label>
+                    <p class="text-slate-200"><%= q %></p>
+                    <input type="text" name="answers" placeholder="Your answer" required
+                           class="p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-slate-400">
+                </div>
+            <% }) %>
+
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-500 transition-all py-3 rounded-xl font-semibold shadow-lg shadow-blue-900/20 mt-4 text-center">
+                Verify Identity
+            </button>
+        </form>
+
+        <div class="mt-6 text-sm text-center">
+            <a href="/auth/login" class="text-blue-400 hover:underline">Cancel and Login</a>
+        </div>
+    </div>
+</body>
+</html>
